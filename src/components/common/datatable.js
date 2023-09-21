@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import DataTable from "react-data-table-component";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -13,11 +13,17 @@ import {
 	ModalFooter,
 	ModalHeader,
 } from "reactstrap";
+import Swal from "sweetalert2";
 
-const Datatable = ({ myData, myClass, multiSelectOption, pagination }) => {
+const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, formUpdate, onDelete = () => {}, onUpdate = () => {} }) => {
 	const [open, setOpen] = useState(false);
 	const [checkedValues, setCheckedValues] = useState([]);
 	const [data, setData] = useState(myData);
+
+	useEffect(() => {
+		setData(myData)
+	}, [myData])
+
 	const selectRow = (e, i) => {
 		if (!e.target.checked) {
 			setCheckedValues(checkedValues.filter((item, j) => i !== item));
@@ -54,13 +60,36 @@ const Datatable = ({ myData, myClass, multiSelectOption, pagination }) => {
 	};
 
 	const handleDelete = (index) => {
-		if (window.confirm("Are you sure you wish to delete this item?")) {
-			const del = data;
-			del.splice(index, 1);
-			setData([...del]);
-		}
-		toast.success("Successfully Deleted !");
+		// if (window.confirm("Are you sure you wish to delete this item?")) {
+		// 	const del = data;
+		// 	del.splice(index, 1);
+		// 	setData([...del]);
+		// }
+		// toast.success("Successfully Deleted !");
+
+
+		Swal.fire({
+			title: '¿Está seguro de eliminar este registro?',
+			text: "Esta acción no se podrá revertir",
+			icon: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: 'Si, eliminar',
+			cancelButtonText: 'No, cancelar'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				onDelete(index)
+			}
+		})
 	};
+
+	const handleUpdate = (dataItem) => {
+		onUpdate(dataItem)
+	}
+
+
+
 	const onOpenModal = () => {
 		setOpen(true);
 	};
@@ -74,7 +103,10 @@ const Datatable = ({ myData, myClass, multiSelectOption, pagination }) => {
 	};
 
 	const columns = [];
-	for (const key in myData[0]) {
+	let headers = myHeader ? myHeader : myData[0]
+
+
+	for (const key in headers) {
 		let editable = renderEditable;
 		if (key === "image") {
 			editable = null;
@@ -95,7 +127,7 @@ const Datatable = ({ myData, myClass, multiSelectOption, pagination }) => {
 		columns.push({
 			name: <b>{Capitalize(key.toString())}</b>,
 			header: <b>{Capitalize(key.toString())}</b>,
-			selector: row => row[key],
+			selector: row => myHeader ? row[myHeader[key]] : row[key],
 			Cell: editable,
 			style: {
 				textAlign: "center",
@@ -104,45 +136,45 @@ const Datatable = ({ myData, myClass, multiSelectOption, pagination }) => {
 	}
 
 	if (multiSelectOption === true) {
-		columns.push({
-			name: (
-				<button
-					className="btn btn-danger btn-sm btn-delete mb-0 b-r-4"
-					onClick={(e) => {
-						if (window.confirm("Are you sure you wish to delete this item?"))
-							handleRemoveRow();
-					}}
-				>
-					Delete
-				</button>
-			),
-			id: "delete",
-			accessor: (str) => "delete",
-			cell: (row) => (
-				<div>
-					<span>
-						<input
-							type="checkbox"
-							name={row.id}
-							defaultChecked={checkedValues.includes(row.id)}
-							onChange={(e) => selectRow(e, row.id)}
-						/>
-					</span>
-				</div>
-			),
-			style: {
-				textAlign: "center",
-			},
-			sortable: false,
-		});
+		// columns.push({
+		// 	name: (
+		// 		<button
+		// 			className="btn btn-danger btn-sm btn-delete mb-0 b-r-4"
+		// 			onClick={(e) => {
+		// 				if (window.confirm("Are you sure you wish to delete this item?"))
+		// 					handleRemoveRow();
+		// 			}}
+		// 		>
+		// 			Delete
+		// 		</button>
+		// 	),
+		// 	id: "delete",
+		// 	accessor: (str) => "delete",
+		// 	cell: (row) => (
+		// 		<div>
+		// 			<span>
+		// 				<input
+		// 					type="checkbox"
+		// 					name={row.id}
+		// 					defaultChecked={checkedValues.includes(row.id)}
+		// 					onChange={(e) => selectRow(e, row.id)}
+		// 				/>
+		// 			</span>
+		// 		</div>
+		// 	),
+		// 	style: {
+		// 		textAlign: "center",
+		// 	},
+		// 	sortable: false,
+		// });
 	} else {
 		columns.push({
-			name: <b>Action</b>,
-			id: "delete",
-			accessor: (str) => "delete",
+			name: <b>Acciones</b>,
+			id: "actions",
+			accessor: (str) => "actions",
 			cell: (row, index) => (
 				<div>
-					<span onClick={() => handleDelete(index)}>
+					<span onClick={() => handleDelete(row.id)}>
 						<i
 							className="fa fa-trash"
 							style={{
@@ -154,7 +186,19 @@ const Datatable = ({ myData, myClass, multiSelectOption, pagination }) => {
 						></i>
 					</span>
 
-					<span>
+					<span onClick={() => handleUpdate(row)}>
+						<i
+							className="fa fa-pencil"
+							style={{
+								width: 35,
+								fontSize: 20,
+								padding: 11,
+								color: "#e4566e",
+							}}
+						></i>
+					</span>
+
+					{/* <span>
 						<i
 							onClick={onOpenModal}
 							className="fa fa-pencil"
@@ -212,7 +256,7 @@ const Datatable = ({ myData, myClass, multiSelectOption, pagination }) => {
 								</Button>
 							</ModalFooter>
 						</Modal>
-					</span>
+					</span> */}
 				</div>
 			),
 			style: {

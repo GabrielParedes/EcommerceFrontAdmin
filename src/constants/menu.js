@@ -13,14 +13,14 @@ import {
 } from 'react-feather';
 
 export const MENUITEMS = [
-    {
-        path: '/dashboard', title: 'Dashboard', icon: Home, type: 'link', badgeType: 'primary', active: false
-    },
+    // {
+    //     path: '/dashboard', title: 'Dashboard', icon: Home, type: 'link', badgeType: 'primary', active: false
+    // },
     {
         title: 'Productos', icon: Box, type: 'sub', active: false, children: [
             { path: '/productos/categoria', title: 'Categorías', type: 'link' },
-            { path: '/productos/lista-de-productos', title: 'Product List', type: 'link' },
-            { path: '/productos/agregar-producto', title: 'Agregar producto', type: 'link' },
+            { path: '/productos/lista-de-productos', title: 'Productos', type: 'link' },
+            // { path: '/productos/agregar-producto', title: 'Agregar producto', type: 'link' },
             // {
             //     title: 'Físicos', type: 'sub', active: false, children: [
             //         { path: '/products/categoria', title: 'Categorías', type: 'link' },

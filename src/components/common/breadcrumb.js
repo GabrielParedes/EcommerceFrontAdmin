@@ -12,7 +12,7 @@ const Breadcrumb = ({title,parent}) => {
 						<div className="page-header-left">
 							<h3>
 								{title}
-								<small>Multikart Admin panel</small>
+								<small>Admin panel</small>
 							</h3>
 						</div>
 					</Col>

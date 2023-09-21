@@ -2,8 +2,8 @@ import React, { Fragment } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import App from '../components/app'
 import Datatable from '../components/common/datatable'
-import Createcoupons from '../components/coupons/create-coupons'
-import ListCoupons from '../components/coupons/list-coupons'
+// import Createcoupons from '../components/coupons/create-coupons'
+// import ListCoupons from '../components/coupons/list-coupons'
 import Dashboard from '../components/dashboard'
 import Invoice from '../components/invoice'
 import Rates from '../components/localization/rates'
@@ -103,14 +103,14 @@ const LayoutRoutes = () => {
 						element={<Transactionsales />}
 					/>
 
-					<Route
+					{/* <Route
 						path={`${process.env.PUBLIC_URL}/coupons/list-coupons`}
 						element={<ListCoupons />}
-					/>
-					<Route
+					/> */}
+					{/* <Route
 						path={`${process.env.PUBLIC_URL}/coupons/create-coupons`}
 						element={<Createcoupons />}
-					/>
+					/> */}
 
 					<Route
 						path={`${process.env.PUBLIC_URL}/pages/list-page`}

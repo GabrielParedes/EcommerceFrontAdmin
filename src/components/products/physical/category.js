@@ -1,7 +1,7 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Breadcrumb from "../../common/breadcrumb";
 import "react-toastify/dist/ReactToastify.css";
-import { data } from "../../../assets/data/category";
+// import { data } from "../../../assets/data/category";
 import Datatable from "../../common/datatable";
 import {
 	Button,
@@ -20,8 +20,80 @@ import {
 	ModalHeader,
 	Row,
 } from "reactstrap";
+import { deleteDataById, getData, getDataById, postData, putDataById } from "../../../helpers/apiCaller";
+import { toast } from "react-toastify";
 
 const Category = () => {
+	const [data, setData] = useState([])
+	const [isUpdate, setIsUpdate] = useState(false)
+	const [formData, setFormData] = useState({
+    name: ''
+  });
+
+	const header = {
+		id: 'id',
+		nombre: 'name'
+	}
+
+	useEffect(() => {
+		getCategories()
+	}, [])
+
+	const getCategories = async () => {
+		let dataCategories = await getData('categorias')
+
+		dataCategories = dataCategories.map(item => {
+			return {
+				id: item[0],
+				name: item[1],
+			}
+		})
+
+		setData(dataCategories)
+		onCloseModal()
+	}
+
+	const handleCreate = async () => {
+		await postData('categorias', {...formData, image: ''})
+			.then(_ => {
+				toast.success("Creado correctamente")
+				getCategories()
+			})
+	}
+
+	const handleUpdate = async () => {
+		await putDataById('categorias', formData.id, {...formData, image: ''})
+			.then(_ => {
+				toast.success("Modificado correctamente")
+				getCategories()
+			})
+	}
+
+	const handleDelete = async (id) => {
+		await deleteDataById('categorias', id)
+		.then(_ => {
+			toast.success("Eliminado correctamente")
+			getCategories()
+		})
+	}
+
+  const handleChange = (event) => {
+    const { name, value } = event.target
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+	const openUpdate = (item) => {
+		setOpen(true)
+		setIsUpdate(true)
+		setFormData(item)
+	}
+
+
+
+
 	const [open, setOpen] = useState(false);
 
 	const onOpenModal = () => {
@@ -29,12 +101,16 @@ const Category = () => {
 	};
 
 	const onCloseModal = () => {
-		setOpen(false);
+		setOpen(false)
+		setIsUpdate(false)
+		setFormData({
+			name: ''
+		})
 	};
 
 	return (
 		<Fragment>
-			<Breadcrumb title="Category" parent="Physical" />
+			{/* <Breadcrumb title="Category" parent="Physical" /> */}
 			{/* <!-- Container-fluid starts--> */}
 			<Container fluid={true}>
 				<Row>
@@ -61,11 +137,11 @@ const Category = () => {
 												className="modal-title f-w-600"
 												id="exampleModalLabel2"
 											>
-												Agregar categoría
+												{isUpdate ? 'Actualizar categoría' : 'Agregar categoría'}
 											</h5>
 										</ModalHeader>
-										<ModalBody>
-											<Form>
+										<Form>
+											<ModalBody>
 												<FormGroup>
 													<Label
 														htmlFor="recipient-name"
@@ -73,9 +149,15 @@ const Category = () => {
 													>
 														Nombre de la categoría :
 													</Label>
-													<Input type="text" className="form-control" />
+													<Input
+														type="text"
+														className="form-control"
+														name="name"
+														value={formData.name}
+														onChange={(event) => handleChange(event)}
+													/>
 												</FormGroup>
-												<FormGroup>
+												{/* <FormGroup>
 													<Label
 														htmlFor="message-text"
 														className="col-form-label"
@@ -87,35 +169,38 @@ const Category = () => {
 														id="validationCustom02"
 														type="file"
 													/>
-												</FormGroup>
-											</Form>
-										</ModalBody>
-										<ModalFooter>
-											<Button
-												type="button"
-												color="primary"
-												onClick={() => onCloseModal("VaryingMdo")}
-											>
-												Save
-											</Button>
-											<Button
-												type="button"
-												color="secondary"
-												onClick={() => onCloseModal("VaryingMdo")}
-											>
-												Close
-											</Button>
-										</ModalFooter>
+												</FormGroup> */}
+											</ModalBody>
+											<ModalFooter>
+												<Button
+													type="button"
+													color="primary"
+													onClick={() => isUpdate ? handleUpdate() : handleCreate()}
+												>
+													{isUpdate ? 'Actualizar' : 'Agregar'}
+												</Button>
+												<Button
+													type="button"
+													color="secondary"
+													onClick={() => onCloseModal("VaryingMdo")}
+												>
+													Cancelar
+												</Button>
+											</ModalFooter>
+										</Form>
 									</Modal>
 								</div>
 								<div className="clearfix"></div>
 								<div id="basicScenario" className="product-physical">
 									<Datatable
+										myHeader={header}
 										myData={data}
 										multiSelectOption={false}
 										pageSize={10}
 										pagination={true}
 										class="-striped -highlight"
+										onUpdate={(dataItem) => openUpdate(dataItem)}
+										onDelete={(id) => handleDelete(id)}
 									/>
 								</div>
 							</CardBody>
