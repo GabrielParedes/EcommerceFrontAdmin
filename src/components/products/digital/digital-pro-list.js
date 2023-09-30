@@ -116,18 +116,18 @@ const Digital_pro_list = () => {
 		console.log(variantData)
 
 		let error = false
-		let exceptions = ['brand', 'discount', 'new', 'sale', 'type', 'color']
+		let exceptions = ['brand', 'discount', 'new', 'sale', 'type', 'color', 'product_id', 'image_id']
 
 		Object.keys(formData).forEach((key) => {
-			console.log(key)
 			if (formData[key] == '' && !exceptions.includes(key)) {
+				console.log(key)
 				error = true
 			}
 		})
 
 		Object.keys(variantData).forEach((key) => {
-			console.log(key)
 			if (variantData[key] == '' && !exceptions.includes(key)) {
+				console.log(key)
 				error = true
 			}
 		})
@@ -163,18 +163,18 @@ const Digital_pro_list = () => {
 		console.log(variantData)
 
 		let error = false
-		let exceptions = ['brand', 'discount', 'new', 'sale', 'type', 'color']
+		let exceptions = ['brand', 'discount', 'new', 'sale', 'type', 'color', 'product_id', 'image_id']
 
 		Object.keys(formData).forEach((key) => {
-			console.log(key)
 			if (formData[key] == '' && !exceptions.includes(key)) {
+				console.log(key)
 				error = true
 			}
 		})
 
 		Object.keys(variantData).forEach((key) => {
-			console.log(key)
 			if (variantData[key] == '' && !exceptions.includes(key)) {
+				console.log(key)
 				error = true
 			}
 		})
