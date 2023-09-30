@@ -190,7 +190,7 @@ const Sidebar = () => {
 			<div className="page-sidebar">
 				<div className="main-header-left d-none d-lg-block">
 					<div className="logo-wrapper">
-						<Link to={`${process.env.PUBLIC_URL}/dashboard`}>
+						<Link to={`${process.env.PUBLIC_URL}/reports/report`}>
 							<img className="blur-up lazyloaded" src={logo} alt="" />
 						</Link>
 					</div>

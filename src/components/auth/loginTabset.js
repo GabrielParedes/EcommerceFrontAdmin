@@ -7,7 +7,7 @@ import { postData } from "../../helpers/apiCaller";
 import Swal from "sweetalert2";
 
 const LoginTabset = () => {
-	const [formData, setFormData] = useState({username: '', password: ''})
+	const [formData, setFormData] = useState({username: '', password: '', type: 'admin'})
 	const history = useNavigate();
 
 	const clickActive = (event) => {

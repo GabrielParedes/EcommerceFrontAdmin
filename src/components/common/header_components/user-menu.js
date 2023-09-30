@@ -1,7 +1,7 @@
 import React, { Fragment } from "react";
 import { Link } from "react-router-dom";
 //images import
-import man from "../../../assets/images/dashboard/man.png";
+import user from "../../../assets/images/dashboard/user-icon.jpg";
 
 const UserMenu = () => {
 	return (
@@ -10,7 +10,7 @@ const UserMenu = () => {
 				<div className="media align-items-center">
 					<img
 						className="align-self-center pull-right img-50 rounded-circle blur-up lazyloaded"
-						src={man}
+						src={user}
 						alt="header-user"
 					/>
 					{/* <div className="dotted-animation">

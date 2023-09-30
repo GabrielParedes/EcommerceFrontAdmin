@@ -25,6 +25,7 @@ import { v4 as uuidv4 } from 'uuid';
 import one from "../../../assets/images/pro3/1.jpg";
 import user from "../../../assets/images/user.png";
 import MDEditor from "@uiw/react-md-editor";
+import Swal from "sweetalert2";
 
 const Digital_pro_list = () => {
 	const [data, setData] = useState([])
@@ -114,45 +115,99 @@ const Digital_pro_list = () => {
 		console.log(formData)
 		console.log(variantData)
 
-		await postData('productos', { ...formData })
-			.then(async resp => {
-				toast.success("Creado correctamente")
+		let error = false
+		let exceptions = ['brand', 'discount', 'new', 'sale', 'type', 'color']
 
-				await postData('imagenes', { product_id: resp.id, id: uuidv4(), src: file, alt: '', color: '' })
-					.then(async resp_img => {
-						toast.success("Creado correctamente")
+		Object.keys(formData).forEach((key) => {
+			console.log(key)
+			if (formData[key] == '' && !exceptions.includes(key)) {
+				error = true
+			}
+		})
 
-						await postData('variantes', { ...variantData, product_id: resp.id, id: uuidv4(), image_id: resp_img.id })
-							.then(_ => {
-								toast.success("Creado correctamente")
-							})
-					})
+		Object.keys(variantData).forEach((key) => {
+			console.log(key)
+			if (variantData[key] == '' && !exceptions.includes(key)) {
+				error = true
+			}
+		})
 
-				getProducts()
-			})
+		if (error) {
+			Swal.fire(
+				'Error al crear producto',
+				'Complete todos los campos',
+				'warning'
+			)
+		} else {
+			await postData('productos', { ...formData })
+				.then(async resp => {
+					toast.success("Creado correctamente")
+
+					await postData('imagenes', { product_id: resp.id, id: uuidv4(), src: file, alt: '', color: '' })
+						.then(async resp_img => {
+							toast.success("Creado correctamente")
+
+							await postData('variantes', { ...variantData, product_id: resp.id, id: uuidv4(), image_id: resp_img.id })
+								.then(_ => {
+									toast.success("Creado correctamente")
+								})
+						})
+
+					getProducts()
+				})
+		}
 	}
 
 	const handleUpdate = async () => {
-		await putDataById('productos', formData.id, { ...formData })
-			.then(_ => {
-				toast.success("Modificado correctamente")
-			})
+		console.log(formData)
+		console.log(variantData)
 
-		await deleteDataById('variantes', formData.id)
+		let error = false
+		let exceptions = ['brand', 'discount', 'new', 'sale', 'type', 'color']
 
-		await deleteDataById('imagenes', formData.id)
+		Object.keys(formData).forEach((key) => {
+			console.log(key)
+			if (formData[key] == '' && !exceptions.includes(key)) {
+				error = true
+			}
+		})
 
-		await postData('imagenes', { product_id: formData.id, id: uuidv4(), src: file, alt: '', color: '' })
-			.then(async resp_img => {
-				toast.success("Creado correctamente")
+		Object.keys(variantData).forEach((key) => {
+			console.log(key)
+			if (variantData[key] == '' && !exceptions.includes(key)) {
+				error = true
+			}
+		})
 
-				await postData('variantes', { ...variantData, product_id: formData.id, id: uuidv4(), image_id: resp_img.id })
-					.then(_ => {
-						toast.success("Creado correctamente")
-					})
-			})
+		if (error) {
+			Swal.fire(
+				'Error al modificar producto',
+				'Complete todos los campos',
+				'warning'
+			)
+		} else {
+			await putDataById('productos', formData.id, { ...formData })
+				.then(_ => {
+					toast.success("Modificado correctamente")
+				})
 
-		getProducts()
+			await deleteDataById('variantes', formData.id)
+
+			await deleteDataById('imagenes', formData.id)
+
+			await postData('imagenes', { product_id: formData.id, id: uuidv4(), src: file, alt: '', color: '' })
+				.then(async resp_img => {
+					toast.success("Creado correctamente")
+
+					await postData('variantes', { ...variantData, product_id: formData.id, id: uuidv4(), image_id: resp_img.id })
+						.then(_ => {
+							toast.success("Creado correctamente")
+						})
+				})
+
+			getProducts()
+		}
+
 	}
 
 	const handleDelete = async (id) => {
@@ -318,7 +373,7 @@ const Digital_pro_list = () => {
 												className="modal-title f-w-600"
 												id="exampleModalLabel2"
 											>
-												{isUpdate ? 'Actualizar categoría' : 'Agregar categoría'}
+												{isUpdate ? 'Actualizar producto' : 'Agregar producto'}
 											</h5>
 										</ModalHeader>
 										<Form>
@@ -376,18 +431,14 @@ const Digital_pro_list = () => {
 															Tamaño :
 														</Label>
 														<div className="col-xl-8 col-sm-7">
-															<select
-																className="form-control digits"
+															<Input
+																className="form-control "
+																type="text"
 																name="size"
 																value={variantData.size}
 																onChange={(event) => handleChangeVariant(event)}
 																required
-															>
-																<option>S</option>
-																<option>M</option>
-																<option>L</option>
-																<option>XL</option>
-															</select>
+															/>
 														</div>
 													</FormGroup>
 													<FormGroup className="form-group mb-3 row">
