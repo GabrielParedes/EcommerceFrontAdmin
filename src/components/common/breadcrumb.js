@@ -7,7 +7,7 @@ const Breadcrumb = ({title,parent}) => {
 	return (
 		<Container fluid={true}>
 			<div className="page-header">
-				<Row>
+				{/* <Row>
 					<Col lg="6">
 						<div className="page-header-left">
 							<h3>
@@ -27,7 +27,7 @@ const Breadcrumb = ({title,parent}) => {
 							<li className="breadcrumb-item active">{title}</li>
 						</ol>
 					</Col>
-				</Row>
+				</Row> */}
 			</div>
 		</Container>
 	);

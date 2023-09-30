@@ -12,7 +12,7 @@ const Profile = () => {
 			<Breadcrumb title="Profile" parent="Settings" />
 			<Container fluid={true}>
 				<Row>
-					<Col xl="4">
+					{/* <Col xl="4">
 						<Card>
 							<CardBody>
 								<div className="profile-details text-center">
@@ -95,7 +95,7 @@ const Profile = () => {
 								</div>
 							</CardBody>
 						</Card>
-					</Col>
+					</Col> */}
 					<Col xl="8">
 						<Card className="profile-card">
 							<CardBody>

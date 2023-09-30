@@ -4,6 +4,9 @@ import { User, Settings } from "react-feather";
 import { Button, Col, Input, Label, Row, Table } from "reactstrap";
 
 const TabsetProfile = () => {
+	let {id, name, username, email} = JSON.parse(localStorage.getItem('user'))
+
+
 	return (
 		<div>
 			<Tabs>
@@ -12,10 +15,10 @@ const TabsetProfile = () => {
 						<User className="me-2" />
 						Profile
 					</Tab>
-					<Tab className="nav-link">
+					{/* <Tab className="nav-link">
 						<Settings className="me-2" />
 						Contact
-					</Tab>
+					</Tab> */}
 				</TabList>
 
 				<TabPanel>
@@ -25,32 +28,16 @@ const TabsetProfile = () => {
 							<Table className="table-responsive">
 								<tbody>
 									<tr>
-										<td>First Name:</td>
-										<td>John</td>
+										<td>Nombre:</td>
+										<td>{name}</td>
 									</tr>
 									<tr>
-										<td>Last Name:</td>
-										<td>Deo</td>
+										<td>Usuario:</td>
+										<td>{username}</td>
 									</tr>
 									<tr>
 										<td>Email:</td>
-										<td>johndeo@gmail.com</td>
-									</tr>
-									<tr>
-										<td>Gender:</td>
-										<td>Male</td>
-									</tr>
-									<tr>
-										<td>Mobile Number:</td>
-										<td>2124821463</td>
-									</tr>
-									<tr>
-										<td>DOB:</td>
-										<td>Dec, 15 1993</td>
-									</tr>
-									<tr>
-										<td>Location:</td>
-										<td>USA</td>
+										<td>{email}</td>
 									</tr>
 								</tbody>
 							</Table>

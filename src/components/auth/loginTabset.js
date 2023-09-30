@@ -1,10 +1,13 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import { Tabs, TabList, TabPanel, Tab } from "react-tabs";
 import { User, Unlock } from "react-feather";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, Form, FormGroup, Input, Label } from "reactstrap";
+import { postData } from "../../helpers/apiCaller";
+import Swal from "sweetalert2";
 
 const LoginTabset = () => {
+	const [formData, setFormData] = useState({username: '', password: ''})
 	const history = useNavigate();
 
 	const clickActive = (event) => {
@@ -12,9 +15,43 @@ const LoginTabset = () => {
 		event.target.classList.add("show");
 	};
 
-	const routeChange = () => {
-		history(`${process.env.PUBLIC_URL}/reports/report`);
+	const login = (event) => {
+		event.preventDefault()
+		postData('clientes/username', formData)
+			.then(resp => {
+				if (!resp.message) {
+					localStorage.setItem('user', JSON.stringify({ id: resp[0], name: resp[1], username: resp[2], email: resp[2] }))
+					localStorage.setItem('isSessionActive', true)
+					// router.push('/shop/list_view');
+					history(`${process.env.PUBLIC_URL}/reports/report`);
+				} else {
+					Swal.fire(
+						'Credenciales incorrectas',
+						'Las credenciales proporcionadas son incorrectas',
+						'error'
+					)
+				}
+			})
+
+	}
+
+	const handleChange = (event) => {
+		const { name, value } = event.target
+
+		console.log(name, value)
+
+		setFormData({
+			...formData,
+			[name]: value,
+		});
 	};
+
+
+
+
+	// const routeChange = () => {
+	// 	history(`${process.env.PUBLIC_URL}/reports/report`);
+	// };
 	return (
 		<div>
 			<Fragment>
@@ -35,20 +72,24 @@ const LoginTabset = () => {
 							<FormGroup>
 								<Input
 									required=""
-									name="login[username]"
+									name="username"
 									type="email"
 									className="form-control"
-									placeholder="Usuario"
-									id="exampleInputEmail1"
+									placeholder="Email"
+									id="username"
+									value={formData.username}
+									onChange={(event) => handleChange(event)}
 								/>
 							</FormGroup>
 							<FormGroup>
 								<Input
 									required=""
-									name="login[password]"
+									name="password"
 									type="password"
 									className="form-control"
-									placeholder="Contraseña"
+									placeholder="password"
+									value={formData.password} 
+									onChange={(event) => handleChange(event)}
 								/>
 							</FormGroup>
 							{/* <div className="form-terms">
@@ -73,7 +114,7 @@ const LoginTabset = () => {
 								<Button
 									color="primary"
 									type="submit"
-									onClick={() => routeChange()}
+									onClick={(e) => login(e)}
 								>
 									Iniciar sesión
 								</Button>
@@ -150,7 +191,7 @@ const LoginTabset = () => {
 									</Label>
 								</div>
 							</div>
-							<div className="form-button">
+							{/* <div className="form-button">
 								<Button
 									color="primary"
 									type="submit"
@@ -158,7 +199,7 @@ const LoginTabset = () => {
 								>
 									Register
 								</Button>
-							</div>
+							</div> */}
 							<div className="form-footer">
 								<span>Or Sign up with social platforms</span>
 								<ul className="social">

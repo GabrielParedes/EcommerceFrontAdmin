@@ -15,7 +15,7 @@ import {
 } from "reactstrap";
 import Swal from "sweetalert2";
 
-const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, formUpdate, onDelete = () => {}, onUpdate = () => {} }) => {
+const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, formUpdate, onDelete = () => { }, onUpdate = () => { }, onView = () => { }, hasView, hasDelete, hasUpdate }) => {
 	const [open, setOpen] = useState(false);
 	const [checkedValues, setCheckedValues] = useState([]);
 	const [data, setData] = useState(myData);
@@ -32,7 +32,7 @@ const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, f
 			setCheckedValues(checkedValues);
 		}
 	};
-	
+
 
 	const handleRemoveRow = () => {
 		const updatedData = myData.filter(function (el) {
@@ -59,7 +59,7 @@ const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, f
 		);
 	};
 
-	const handleDelete = (index) => {
+	const handleDelete = (id) => {
 		// if (window.confirm("Are you sure you wish to delete this item?")) {
 		// 	const del = data;
 		// 	del.splice(index, 1);
@@ -79,13 +79,19 @@ const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, f
 			cancelButtonText: 'No, cancelar'
 		}).then((result) => {
 			if (result.isConfirmed) {
-				onDelete(index)
+				onDelete(id)
 			}
 		})
 	};
 
 	const handleUpdate = (dataItem) => {
 		onUpdate(dataItem)
+	}
+
+	const handleView = (id) => {
+		console.log(id)
+
+		onView(id)
 	}
 
 
@@ -168,37 +174,64 @@ const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, f
 		// 	sortable: false,
 		// });
 	} else {
-		columns.push({
-			name: <b>Acciones</b>,
-			id: "actions",
-			accessor: (str) => "actions",
-			cell: (row, index) => (
-				<div>
-					<span onClick={() => handleDelete(row.id)}>
-						<i
-							className="fa fa-trash"
-							style={{
-								width: 35,
-								fontSize: 20,
-								padding: 11,
-								color: "#e4566e",
-							}}
-						></i>
-					</span>
+		if (hasDelete || hasUpdate || hasView) {
 
-					<span onClick={() => handleUpdate(row)}>
-						<i
-							className="fa fa-pencil"
-							style={{
-								width: 35,
-								fontSize: 20,
-								padding: 11,
-								color: "#e4566e",
-							}}
-						></i>
-					</span>
+			columns.push({
+				name: <b>Acciones</b>,
+				id: "actions",
+				accessor: (str) => "actions",
+				cell: (row, index) => (
+					<div>
+						{
+							hasView && (
+								<span onClick={() => handleView(row.id)}>
+									<i
+										className="fa fa-eye"
+										style={{
+											width: 35,
+											fontSize: 20,
+											padding: 11,
+											color: "#e4566e",
+										}}
+									></i>
+								</span>
+							)
 
-					{/* <span>
+						}
+						{
+							hasUpdate && (
+								<span onClick={() => handleUpdate(row)}>
+									<i
+										className="fa fa-pencil"
+										style={{
+											width: 35,
+											fontSize: 20,
+											padding: 11,
+											color: "#e4566e",
+										}}
+									></i>
+								</span>
+							)
+						}
+
+						{
+							hasDelete && (
+								<span onClick={() => handleDelete(row.id)}>
+									<i
+										className="fa fa-trash"
+										style={{
+											width: 35,
+											fontSize: 20,
+											padding: 11,
+											color: "#e4566e",
+										}}
+									></i>
+								</span>
+							)
+						}
+
+
+						{/* <span>
 						<i
 							onClick={onOpenModal}
 							className="fa fa-pencil"
@@ -257,13 +290,14 @@ const Datatable = ({ myData, myHeader, myClass, multiSelectOption, pagination, f
 							</ModalFooter>
 						</Modal>
 					</span> */}
-				</div>
-			),
-			style: {
-				textAlign: "center",
-			},
-			sortable: false,
-		});
+					</div>
+				),
+				style: {
+					textAlign: "center",
+				},
+				sortable: false,
+			});
+		}
 	}
 	return (
 		<div>

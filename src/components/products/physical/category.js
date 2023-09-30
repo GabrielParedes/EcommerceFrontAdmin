@@ -27,8 +27,8 @@ const Category = () => {
 	const [data, setData] = useState([])
 	const [isUpdate, setIsUpdate] = useState(false)
 	const [formData, setFormData] = useState({
-    name: ''
-  });
+		name: ''
+	});
 
 	const header = {
 		id: 'id',
@@ -54,7 +54,7 @@ const Category = () => {
 	}
 
 	const handleCreate = async () => {
-		await postData('categorias', {...formData, image: ''})
+		await postData('categorias', { ...formData, image: '' })
 			.then(_ => {
 				toast.success("Creado correctamente")
 				getCategories()
@@ -62,7 +62,7 @@ const Category = () => {
 	}
 
 	const handleUpdate = async () => {
-		await putDataById('categorias', formData.id, {...formData, image: ''})
+		await putDataById('categorias', formData.id, { ...formData, image: '' })
 			.then(_ => {
 				toast.success("Modificado correctamente")
 				getCategories()
@@ -71,19 +71,19 @@ const Category = () => {
 
 	const handleDelete = async (id) => {
 		await deleteDataById('categorias', id)
-		.then(_ => {
-			toast.success("Eliminado correctamente")
-			getCategories()
-		})
+			.then(_ => {
+				toast.success("Eliminado correctamente")
+				getCategories()
+			})
 	}
 
-  const handleChange = (event) => {
-    const { name, value } = event.target
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+	const handleChange = (event) => {
+		const { name, value } = event.target
+		setFormData({
+			...formData,
+			[name]: value,
+		});
+	};
 
 	const openUpdate = (item) => {
 		setOpen(true)
@@ -193,6 +193,8 @@ const Category = () => {
 								<div className="clearfix"></div>
 								<div id="basicScenario" className="product-physical">
 									<Datatable
+										hasUpdate
+										hasDelete
 										myHeader={header}
 										myData={data}
 										multiSelectOption={false}

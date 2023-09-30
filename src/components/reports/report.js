@@ -19,10 +19,10 @@ import { Card, CardBody, CardHeader, Col, Container, Row } from "reactstrap";
 const Reports = () => {
 	return (
 		<div>
-			<Breadcrumb title="Reports" parent="Reports" />
+			<Breadcrumb title="Ventas" parent="Ventas" />
 			<Container fluid={true}>
 				<Row>
-					<Col xl="8" md="6">
+					{/* <Col xl="8" md="6">
 						<Card>
 							<CardHeader>
 								<h5>Sales Summary</h5>
@@ -36,8 +36,8 @@ const Reports = () => {
 								/>
 							</CardBody>
 						</Card>
-					</Col>
-					<Col xl="4" md="6">
+					</Col> */}
+					{/* <Col xl="4" md="6">
 						<Card className="report-employee">
 							<CardHeader>
 								<h2>75%</h2>
@@ -54,11 +54,11 @@ const Reports = () => {
 								</div>
 							</CardBody>
 						</Card>
-					</Col>
+					</Col> */}
 					<Col sm="12">
 						<Card>
 							<CardHeader>
-								<h5>Transfer Report</h5>
+								<h5>Ventas</h5>
 							</CardHeader>
 							<CardBody>
 								<div id="basicScenario" className="report-table">
@@ -67,7 +67,7 @@ const Reports = () => {
 							</CardBody>
 						</Card>
 					</Col>
-					<Col lg="6">
+					{/* <Col lg="6">
 						<Card>
 							<CardHeader>
 								<h5>Expenses</h5>
@@ -83,8 +83,8 @@ const Reports = () => {
 								</div>
 							</CardBody>
 						</Card>
-					</Col>
-					<Col lg="6">
+					</Col> */}
+					{/* <Col lg="6">
 						<Card>
 							<CardHeader>
 								<h5> Sales / Purchase</h5>
@@ -100,9 +100,9 @@ const Reports = () => {
 								</div>
 							</CardBody>
 						</Card>
-					</Col>
+					</Col> */}
 				</Row>
-				<Col sm="12">
+				{/* <Col sm="12">
 					<Card>
 						<CardHeader>
 							<h5> Sales / Purchase Return</h5>
@@ -118,7 +118,7 @@ const Reports = () => {
 							</div>
 						</CardBody>
 					</Card>
-				</Col>
+				</Col> */}
 			</Container>
 		</div>
 	);

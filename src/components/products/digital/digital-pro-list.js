@@ -445,7 +445,7 @@ const Digital_pro_list = () => {
 														/>
 														<img
 															alt=""
-															src={!file ? user : `http://localhost:5000/${file}`}
+															src={!file ? user : `https://gabrielparedes2000.pythonanywhere.com//${file}`}
 															style={{ width: 50, height: 50 }}
 														/>
 													</div>
@@ -473,6 +473,8 @@ const Digital_pro_list = () => {
 								<div className="clearfix"></div>
 								<div id="basicScenario" className="product-physical">
 									<Datatable
+										hasDelete
+										hasUpdate
 										myHeader={header}
 										myData={data}
 										multiSelectOption={false}
