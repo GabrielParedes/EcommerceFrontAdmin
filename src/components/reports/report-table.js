@@ -3,7 +3,7 @@ import data from "../../assets/data/reports";
 import Datatable from "../common/datatable";
 import { useEffect } from "react";
 import { useState } from "react";
-import { getData, getDataById } from "../../helpers/apiCaller";
+import { getData, getDataById, putDataById } from "../../helpers/apiCaller";
 import { Button, FormGroup, Label, Modal, ModalBody, ModalFooter, ModalHeader } from "reactstrap";
 
 const ReportTable = () => {
@@ -18,6 +18,7 @@ const ReportTable = () => {
 		telefono: 'phone',
 		email: 'email',
 		total: 'total',
+		status: 'status'
 	}
 
 	const headerDetail = {
@@ -48,6 +49,7 @@ const ReportTable = () => {
 						total: item[5],
 						payment_type: item[6],
 						customer_id: item[7],
+						status: item[8] || 'Pedido'
 					}
 				}))
 
@@ -84,6 +86,7 @@ const ReportTable = () => {
 				total: item[5],
 				payment_type: item[6],
 				customer_id: item[7],
+				status: item[8] || 'Pedido'
 			}
 		})
 
@@ -100,11 +103,26 @@ const ReportTable = () => {
 		setOpen(false)
 		setDataPurchase([])
 		setDataDetail([])
+		getPurchases()
 		// setIsUpdate(false)
 		// setFormData({
 		// 	name: ''
 		// })
 	};
+
+	const handleChangeStatus = async (id, status) => {
+		console.log(id, status.target.value)
+
+		await putDataById('compras/status', id, {status: status.target.value})
+		.then(resp => {
+			console.log(resp)
+			showDetailPurchase(id)
+		})
+		.catch(err => {
+			console.log('Error', err)
+		})
+	}
+
 	return (
 		<Fragment>
 			<Modal isOpen={open} toggle={onCloseModal}>
@@ -147,6 +165,23 @@ const ReportTable = () => {
 						<Label>
 							<b>Total :</b> Q{dataPurchase[0]?.total}
 						</Label>
+					</FormGroup>
+					<FormGroup>
+						<Label>
+							<b>Status :</b>
+						</Label>
+						<select
+							value={dataPurchase[0]?.status}
+							onChange={(value) => handleChangeStatus(dataPurchase[0]?.id, value)}
+						>
+							<option value={'Pedido'}>Pedido</option>
+							<option value={'Pendiente de confirmar'}>Pendiente de confirmar</option>
+							<option value={'Confirmado'}>Confirmado</option>
+							<option value={'Sin empaquetar'}>Sin empaquetar</option>
+							<option value={'Empaquetado'}>Empaquetado</option>
+							<option value={'Enviado'}>Enviado</option>
+							<option value={'Entregado'}>Entregado</option>
+						</select>
 					</FormGroup>
 					<Datatable
 						myHeader={headerDetail}
