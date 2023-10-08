@@ -451,6 +451,7 @@ const Digital_pro_list = () => {
 																name="category_id"
 																onChange={(event) => handleChange(event)}
 																defaultValue={categories[0]?.id || ''}
+																value={formData.category_id}
 															>
 																{
 																	categories.map(category => (
